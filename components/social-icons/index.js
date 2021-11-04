@@ -6,7 +6,6 @@ import Linkedin from './linkedin.svg'
 import Twitter from './twitter.svg'
 import Discord from './discord.svg'
 
-
 // Icons taken from: https://simpleicons.org/
 
 const components = {

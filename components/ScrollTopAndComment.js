@@ -18,7 +18,7 @@ const ScrollTopAndComment = () => {
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  
+
   return (
     <div className="fixed flex-col hidden gap-3 right-8 bottom-8 md:flex">
       <button
