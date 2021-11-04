@@ -1,7 +1,7 @@
 const siteMetadata = {
   title: 'Infosec Writeups',
   author: 'Samuel Jonathan',
-  headerTitle: 'x3la.me',
+  headerTitle: 'xela.me',
   description: 'Site created with Next.js and Tailwind.css',
   language: 'en-us',
   siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
