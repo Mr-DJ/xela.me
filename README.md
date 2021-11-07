@@ -1,3 +1,4 @@
+![GitHub Card](https://user-images.githubusercontent.com/28898632/140634896-5252155b-be38-4f07-b55e-2e2f5b8b1cfc.png)
 ## Quick Start Guide
 
 1. JS (official support) - `npx degit https://github.com/timlrx/tailwind-nextjs-starter-blog.git` or TS (community support) - `npx degit timlrx/tailwind-nextjs-starter-blog#typescript`
