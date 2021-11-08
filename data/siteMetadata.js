@@ -4,7 +4,7 @@ const siteMetadata = {
   headerTitle: 'xela.me',
   description: 'Site created with Next.js and Tailwind.css',
   language: 'en-us',
-  siteUrl: 'xela-me.vercel.app',
+  siteUrl: 'https://xela-me.vercel.app',
   siteRepo: 'https://github.com/Mr-DJ/xela.me',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
