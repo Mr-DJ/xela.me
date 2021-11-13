@@ -1,7 +1,7 @@
 const siteMetadata = {
   title: 'Infosec Writeups',
   author: 'Samuel Jonathan',
-  headerTitle: 'xela.me',
+  headerTitle: 'x3la.xyz',
   description: 'Site created with Next.js and Tailwind.css',
   language: 'en-us',
   siteUrl: 'https://xela-me.vercel.app',
