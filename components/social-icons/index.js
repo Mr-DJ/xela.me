@@ -5,6 +5,7 @@ import Youtube from './youtube.svg'
 import Linkedin from './linkedin.svg'
 import Twitter from './twitter.svg'
 import Discord from './discord.svg'
+import Steam from './steam.svg'
 
 // Icons taken from: https://simpleicons.org/
 
@@ -16,6 +17,7 @@ const components = {
   linkedin: Linkedin,
   twitter: Twitter,
   discord: Discord,
+  steam: Steam,
 }
 
 const SocialIcon = ({ kind, href, size = 8 }) => {

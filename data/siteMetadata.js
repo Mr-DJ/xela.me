@@ -14,12 +14,13 @@ const siteMetadata = {
   twitter: 'https://twitter.com/cyka_sam',
   // facebook: 'https://facebook.com',
   // youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com/in/mr-dj/',
+  // linkedin: 'https://www.linkedin.com',
   discord: 'https://www.discord.gg/rqVKvVe',
+  steam: 'https://steamcommunity.com/id/mr-dj/',
   locale: 'en-US',
   analytics: {
     // supports plausible, simpleAnalytics or googleAnalytics
-    plausibleDataDomain: 'xela-me.vercel.app', // e.g. tailwind-nextjs-starter-blog.vercel.app
+    plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
     simpleAnalytics: false, // true or false
     googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
   },

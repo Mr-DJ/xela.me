@@ -5,12 +5,18 @@ occupation: Student
 company: Reva University
 email: jonathandinesh@gmail.com
 twitter: https://twitter.com/cyka_sam
-linkedin: https://www.linkedin.com/in/mr-dj/
 github: https://github.com/Mr-DJ
+discord: https://www.discord.gg/rqVKvVe
 ---
 
-Samuel Jonathan is a chicken wing of atmospheric sciences at the KFC Lab. His research interests includes chickenwing modelling of chicken, wings and nuggets.
+## _I do a little coding, yes._
 
-He leads the clean energy chicken group which develops 3D chicken air pollution-climate models, writes differential equation chicken solvers, and manufactures titanium chicken plated air ballons. In his free time he bakes chicken pie.
+Heyo, my name is Samuel, but you know me as Mr_DJ or xelA on the internet. I am a developer that spends time coding scripts, building applications and creating websites. Been doing this for around 4 years now and still on the road to learn more.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+Languages I know fairly well include HTML, CSS, JavaScript, Java 10, C, C++, C#, Python, Ruby and SQL.
+
+I am a total cyber-security enthusiast. With the lockdown kickstarting my journey, I have been actively pwn-ing boxes on TryHackMe and HackTheBox.
+
+This site is a collection of infosec related posts, including summaries/ walkthroughs of machines that I found interesting, and whatever else I decide to put on here.
+
+See ya around, ta
