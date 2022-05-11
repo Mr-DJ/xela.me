@@ -1,8 +1,8 @@
 ---
 name: Samuel Jonathan
 avatar: /static/images/avatar.png
-occupation: Student
-company: Reva University
+occupation: Cybersecurity Engineer | CTF Player
+# company: discord university
 email: jonathandinesh@gmail.com
 twitter: https://twitter.com/cyka_sam
 github: https://github.com/Mr-DJ
