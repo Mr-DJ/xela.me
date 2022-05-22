@@ -1,0 +1,52 @@
+---
+title: Without a Trace
+date: '2022-05-19'
+tags: ['ctf', 'htb', 'reverse', 'cyberapocalypse2022']
+draft: false
+summary: Reversing challenge featured in HTB Cyber Apocalypse 2022. Draeger's mothership has suddenly vanished, he could be readying an attack! You need to track him down before disaster strikes.
+images: []
+layout: PostLayout
+authors: ['trev']
+---
+
+## TL; DR
+
+The password is encrypted and stored inside four different long variables. Write a script to imitate the binary’s behaviour to determine the correct password.
+
+Another password-related binary which is again very simple. Our area of concern lies in `check_password(char*)`. As the name suggests, this function is responsible for checking the authenticity of the password.
+
+```c
+local_10 = *(long *)(in_FS_OFFSET + 0x28);
+iVar2 = ptrace(PTRACE_TRACEME,0,0,0);
+local_38 = 0x1c4b0d0b043d2b37;
+local_30 = 0x200f0a204c12204c;
+local_28 = 0x184f18200a204b1d;
+local_20 = 0x24f;
+local_1e = 0;
+for (local_40 = 0; local_40 < 0x1a; local_40 = local_40 + 1) {
+*(byte *)((long)&local_38 + (long)(int)local_40) =
+        *(byte *)((long)&local_38 + (long)(int)local_40) ^ (char)iVar2 + 0x7fU;
+}
+iVar1 = strcmp(param_1,(char *)&local_38);
+```
+
+`local_38`,` local_30`,` local_28` and `local_20` are all contiguous segments that store the 26 encrypted characters of the password (8 + 8 + 8 + 2 respectively). Since memory is allocated using the Little Endian system, the characters of the password are stored in reverse i.e. the first character of the password is actually located in the LSB of the long variable. This implies that 37 is the first character, followed by `2b`, then `3d` and so on until `2`. `iVar2` will most likely be `0` as indicated by the [documentation](https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/baselib-ptrace-1.html#:~:text=Return%20Value,set%20to%20an%20appropriate%20value.) of the ptrace method. Using the information gathered so far, we can decrypt the password with some C code of our own.
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char local_38[26] = {0x37, 0x2b, 0x3d, 0x04, 0x0b, 0x0d, 0x4b, 0x1c,
+                         0x4c, 0x20, 0x12, 0x4c, 0x20, 0x0a, 0x0f,0x20,
+                         0x1d, 0x4b, 0x20, 0x0a, 0x20, 0x18, 0x4f, 0x18,
+                         0x4f, 0x02};
+
+    printf("Probable password: ");
+    for (int i = 0; i < 0x1a; i++)
+        printf("%c", (local_38[i] ^ 0 + 0x7fU));
+}
+```
+
+The flag generated is `HTB{tr4c3_m3_up_b4_u_g0g0}`.

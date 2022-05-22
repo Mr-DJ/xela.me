@@ -1,0 +1,84 @@
+---
+title: Rebuilding
+date: '2022-05-19'
+tags: ['ctf', 'htb', 'reverse', 'cyberapocalypse2022']
+draft: false
+summary: Reversing challenge featured in HTB Cyber Apocalypse 2022. This machine has been running since long before you arrived. Can you hope to understand its workings?
+images: []
+layout: PostLayout
+authors: ['trev']
+---
+
+## TL; DR
+
+The password is encrypted and stored in an array. The encryption key is secretly assigned as `aliens` in the binary. Write a script to decrypt the password using the key.
+
+Another password-related binary which is actually very straightforward again. This binary strictly accepts an additional argument - the password. This password must contain 32 characters as evidenced by the check which you can find in the snippet below:
+
+```c
+local_14 = 0;
+sVar1 = strlen(*(char **)(param_2 + 8));
+if (sVar1 == 0x20) {
+for (local_10 = 0; local_10 < 0x20; local_10 = local_10 + 1) {
+    printf("\rCalculating");
+    for (local_c = 0; local_c < 6; local_c = local_c + 1) {
+    if (local_c == local_10 % 6) {
+        __c = 0x2e;
+    }
+    else {
+        __c = 0x20;
+    }
+    putchar(__c);
+    }
+    fflush(stdout);
+    local_14 = local_14 +
+                (uint)((byte)(encrypted[local_10] ^ key[local_10 % 6]) ==
+                    *(byte *)((long)local_10 + *(long *)(param_2 + 8)));
+    usleep(200000);
+}
+puts("");
+if (local_14 == 0x20) {
+    puts("The password is correct");
+    uVar2 = 0;
+}
+else {
+    puts("The password is incorrect");
+    uVar2 = 0xffffffff;
+}
+}
+else {
+puts("Password length is incorrect");
+uVar2 = 0xffffffff;
+}
+```
+
+The password checking mechanism is cluttered with code that handles some visual terminal fluff. Ignore whatever is not relevant. The line below is the most important part that deals in checking whether the password is acceptable.
+
+```c
+local_14 = local_14 +
+(uint)((byte)(encrypted[local_10] ^ key[local_10 % 6]) ==
+        *(byte *)((long)local_10 + *(long *)(param_2 + 8)));
+```
+
+`local_14` stores the number of correctly matched characters between the two passwords. There is also a reference to an array called encrypted which contains the encrypted characters of the expected password. key, on the other hand, is obviously the encryption key which is misleadingly assigned as `humans`. It is misleading because a constructor called `_INIT_1()` later reassigns it to `aliens`. This is the most crucial part of the problem because otherwise the password cannot be correctly decrypted. We can decrypt the password now that we have correctly ascertained the value of the key.
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char encrypted[32] = {0x29, 0x38, 0x2b, 0x1e, 0x06, 0x42, 0x05, 0x5d, 0x07, 0x02, 0x31, 0x42, 0x0f, 0x33, 0x0a, 0x55, 0x00, 0x00, 0x15, 0x1e, 0x1c, 0x06, 0x1a, 0x43, 0x13, 0x59, 0x36, 0x54, 0x00, 0x42, 0x15, 0x11, 0x00};
+    char key[6] = "aliens";
+
+    for (int i = 0; i < 32; i++)
+        printf("%c", encrypted[i]);
+    printf("\n");
+
+    printf("Probable password: ");
+    for (int i = 0; i < 0x20; i++)
+        printf("%c", (encrypted[i] ^ key[i % 6]));
+}
+```
+
+The flag generated is `HTB{h1d1ng_1n_c0nstruct0r5_1n1t}`.
