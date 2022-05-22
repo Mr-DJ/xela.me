@@ -30,7 +30,7 @@ for (local_40 = 0; local_40 < 0x1a; local_40 = local_40 + 1) {
 iVar1 = strcmp(param_1,(char *)&local_38);
 ```
 
-`local_38`,` local_30`,` local_28` and `local_20` are all contiguous segments that store the 26 encrypted characters of the password (8 + 8 + 8 + 2 respectively). Since memory is allocated using the Little Endian system, the characters of the password are stored in reverse i.e. the first character of the password is actually located in the LSB of the long variable. This implies that 37 is the first character, followed by `2b`, then `3d` and so on until `2`. `iVar2` will most likely be `0` as indicated by the [documentation](https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/baselib-ptrace-1.html#:~:text=Return%20Value,set%20to%20an%20appropriate%20value.) of the ptrace method. Using the information gathered so far, we can decrypt the password with some C code of our own.
+`local_38`, `local_30`, `local_28` and `local_20` are all contiguous segments that store the 26 encrypted characters of the password (8 + 8 + 8 + 2 respectively). Since memory is allocated using the Little Endian system, the characters of the password are stored in reverse i.e. the first character of the password is actually located in the LSB of the long variable. This implies that 37 is the first character, followed by `2b`, then `3d` and so on until `2`. `iVar2` will most likely be `0` as indicated by the [documentation](https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/baselib-ptrace-1.html#:~:text=Return%20Value,set%20to%20an%20appropriate%20value.) of the ptrace method. Using the information gathered so far, we can decrypt the password with some C code of our own.
 
 ```c
 #include <stdio.h>

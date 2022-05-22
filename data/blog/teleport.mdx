@@ -1,0 +1,229 @@
+---
+title: Teleport
+date: '2022-05-19'
+tags: ['ctf', 'htb', 'reverse', 'cyberapocalypse2022']
+draft: false
+summary: Reversing challenge featured in HTB Cyber Apocalypse 2022. You've been sent to a strange planet inhabited by a species that can teleport. Can you get the drop on them?
+images: []
+layout: PostLayout
+authors: ['trev']
+---
+
+## TL; DR
+
+The binary reads the flag as a command line argument. An array of function pointers is used to invoke 43 different functions where each function checks a specific character in the flag.
+
+Another password-related binary again. In this binary, the password is the flag itself. The construction of the flag is rather simple but it first requires understanding some other aspects of the binary.
+
+The binary consists of an [array of 43 function pointers](#array-of-function-pointers). All of them are invoked one after the other as seen [here](#excerpt-from-decompiled-code). Each function checks a specific byte in the memory and this process is repeated for 43 different bytes.
+
+These 43 bytes are contiguously allocated on the memory from address `0x00303280` to `0x003032a9`. If you pay close attention to each function’s contents, you will notice that they are each checking for a specific character at a specific location within the previously mentioned range. For instance, `FUN_00101542` checks for if there is a `'c'` at address `0x003032a0` and `FUN_00101652` checks for a `'}'` at `0x003032aa`.
+
+```c
+if (DAT_003032aa == '}') {
+                /* WARNING: Subroutine does not return */
+longjmp((__jmp_buf_tag *)&DAT_003031a0,100);
+}
+```
+
+As seen above, the function checks to see if there is a closing brace at the specified address. There are 42 other such functions that perform similar checks but at different addresses within a specific range. This range along with their designated characters will then form the flag we require.
+
+From this observation, it is obvious that we must use these function checks to determine which character goes into which memory location. So from the above examples, we should assign a `'c'` to `0x003032a0` and assign `'}'` to `0x003032aa` which makes sense because this address is the last memory location in the range. After the characters have been assigned to their designated addresses, you will notice that they form a string of 43 bytes starting from a specific address and ending at another. This string is our flag.
+
+The flag thus obtained is `HTB{h0pp1ng_thru_th3_sp4c3_t1m3_c0nt1nuum!}`
+
+## Appendix
+
+### Excerpt from decompiled code
+
+```c
+for (local_10 = 0; local_10 < 0x2b; local_10 = local_10 + 1) {
+    (*(code *)(&PTR_FUN_00303020)[(int)local_10])();
+}
+```
+
+### Array of function pointers
+
+```c
+                            PTR_FUN_00303020                                XREF[2]:     FUN_00101696:001016f6 (*) ,
+                                                                                          FUN_00101696:001016fd (R)
+        00303020 42  15  10       addr       FUN_00101542
+                 00  00  00
+                 00  00
+        00303028 56  12  10       addr       FUN_00101256
+                 00  00  00
+                 00  00
+        00303030 4a  0d  10       addr       FUN_00100d4a
+                 00  00  00
+                 00  00
+        00303038 7a  10  10       addr       FUN_0010107a
+                 00  00  00
+                 00  00
+        00303040 ee  13  10       addr       FUN_001013ee
+                 00  00  00
+                 00  00
+        00303048 ce  11  10       addr       FUN_001011ce
+                 00  00  00
+                 00  00
+        00303050 ca  15  10       addr       FUN_001015ca
+                 00  00  00
+                 00  00
+        00303058 ae  0f  10       addr       FUN_00100fae
+                 00  00  00
+                 00  00
+        00303060 5a  0e  10       addr       FUN_00100e5a
+                 00  00  00
+                 00  00
+        00303068 b2  0b  10       addr       FUN_00100bb2
+                 00  00  00
+                 00  00
+        00303070 ba  14  10       addr       FUN_001014ba
+                 00  00  00
+                 00  00
+        00303078 86  15  10       addr       FUN_00101586
+                 00  00  00
+                 00  00
+        00303080 8a  11  10       addr       FUN_0010118a
+                 00  00  00
+                 00  00
+        00303088 6a  0f  10       addr       FUN_00100f6a
+                 00  00  00
+                 00  00
+        00303090 fe  14  10       addr       FUN_001014fe
+                 00  00  00
+                 00  00
+        00303098 76  14  10       addr       FUN_00101476
+                 00  00  00
+                 00  00
+        003030a0 c2  0c  10       addr       FUN_00100cc2
+                 00  00  00
+                 00  00
+        003030a8 f6  0b  10       addr       FUN_00100bf6
+                 00  00  00
+                 00  00
+        003030b0 52  16  10       addr       FUN_00101652
+                 00  00  00
+                 00  00
+        003030b8 16  0e  10       addr       FUN_00100e16
+                 00  00  00
+                 00  00
+        003030c0 be  10  10       addr       FUN_001010be
+                 00  00  00
+                 00  00
+        003030c8 12  12  10       addr       FUN_00101212
+                 00  00  00
+                 00  00
+        003030d0 6e  0b  10       addr       FUN_00100b6e
+                 00  00  00
+                 00  00
+        003030d8 2a  0b  10       addr       FUN_00100b2a
+                 00  00  00
+                 00  00
+        003030e0 9a  12  10       addr       FUN_0010129a
+                 00  00  00
+                 00  00
+        003030e8 3a  0c  10       addr       FUN_00100c3a
+                 00  00  00
+                 00  00
+        003030f0 7e  0c  10       addr       FUN_00100c7e
+                 00  00  00
+                 00  00
+        003030f8 9e  0e  10       addr       FUN_00100e9e
+                 00  00  00
+                 00  00
+        00303100 32  14  10       addr       FUN_00101432
+                 00  00  00
+                 00  00
+        00303108 26  0f  10       addr       FUN_00100f26
+                 00  00  00
+                 00  00
+        00303110 46  11  10       addr       FUN_00101146
+                 00  00  00
+                 00  00
+        00303118 8e  0d  10       addr       FUN_00100d8e
+                 00  00  00
+                 00  00
+        00303120 d2  0d  10       addr       FUN_00100dd2
+                 00  00  00
+                 00  00
+        00303128 aa  13  10       addr       FUN_001013aa
+                 00  00  00
+                 00  00
+        00303130 0e  16  10       addr       FUN_0010160e
+                 00  00  00
+                 00  00
+        00303138 f2  0f  10       addr       FUN_00100ff2
+                 00  00  00
+                 00  00
+        00303140 de  12  10       addr       FUN_001012de
+                 00  00  00
+                 00  00
+        00303148 06  0d  10       addr       FUN_00100d06
+                 00  00  00
+                 00  00
+        00303150 36  10  10       addr       FUN_00101036
+                 00  00  00
+                 00  00
+        00303158 66  13  10       addr       FUN_00101366
+                 00  00  00
+                 00  00
+        00303160 22  13  10       addr       FUN_00101322
+                 00  00  00
+                 00  00
+        00303168 02  11  10       addr       FUN_00101102
+                 00  00  00
+                 00  00
+        00303170 e2  0e  10       addr       FUN_00100ee2
+                 00  00  00
+                 00  00
+```
+
+### First three functions decompiled
+
+```c
+void FUN_00101542(void)
+{
+  int iVar1;
+
+  iVar1 = _setjmp((__jmp_buf_tag *)&DAT_00304c00);
+  if (iVar1 == 0) {
+    return;
+  }
+  if (DAT_003032a0 == 'c') {
+                    /* WARNING: Subroutine does not return */
+    longjmp((__jmp_buf_tag *)&DAT_003031a0,0x21);
+  }
+                    /* WARNING: Subroutine does not return */
+  longjmp((__jmp_buf_tag *)&DAT_003031a0,0x65);
+}
+void FUN_00101256(void)
+{
+  int iVar1;
+
+  iVar1 = _setjmp((__jmp_buf_tag *)&DAT_003042a0);
+  if (iVar1 == 0) {
+    return;
+  }
+  if (DAT_00303294 == '_') {
+                    /* WARNING: Subroutine does not return */
+    longjmp((__jmp_buf_tag *)&DAT_003031a0,0x15);
+  }
+                    /* WARNING: Subroutine does not return */
+  longjmp((__jmp_buf_tag *)&DAT_003031a0,0x65);
+}
+void FUN_00100d4a(void)
+{
+  int iVar1;
+
+  iVar1 = _setjmp((__jmp_buf_tag *)&DAT_00304cc8);
+  if (iVar1 == 0) {
+    return;
+  }
+  if (DAT_003032a1 == '0') {
+                    /* WARNING: Subroutine does not return */
+    longjmp((__jmp_buf_tag *)&DAT_003031a0,0x22);
+  }
+                    /* WARNING: Subroutine does not return */
+  longjmp((__jmp_buf_tag *)&DAT_003031a0,0x65);
+}
+```
