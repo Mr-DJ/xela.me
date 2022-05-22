@@ -1,0 +1,185 @@
+---
+title: Omega One
+date: '2022-05-19'
+tags: ['ctf', 'htb', 'reverse', 'cyberapocalypse2022']
+draft: false
+summary: Reversing challenge featured in HTB Cyber Apocalypse 2022. The interface is impossibly large. Can you unravel the storage system?
+images: []
+layout: PostLayout
+authors: ['trev']
+---
+
+## TL; DR
+
+Follow the order of the names given in `output.txt` to know which corresponding letter to pick for forming the final flag.
+
+Another simple binary which does not involve any exploits or in-depth analysis of code. In addition, the binary does not do anything when it is executed (or at least, it does not print anything at all to the terminal).
+
+This function does not have a main, or more accurately speaking, it does not have a function that is \_named \_main. Instead, it has been designated some other name so we must first analyse the entry to know where the binary begins. Upon inspection of the entry method, we find this particular line:
+
+`__libc_start_main(FUN_00100b4c,in_stack_00000000,&stack0x00000008,FUN_001020a0,FUN_00102110, param_3,auStack8);`
+
+While this function call may seem intimidating at first, what matters the most is the first argument. `__libc_start_main`, as the name suggests, essentially invokes the main method of the binary in order to commence its execution. By passing `FUN_00100b4c` as the first argument, we are essentially declaring that this is the main method.
+
+In `FUN_00100b4c`, we find 94 calls to `FUN_00101870`. The most obvious thing that we can observe is that each call submits three arguments which are never the same for any two calls. These arguments have been briefly explained below and apply for every function call:
+
+1.  A one byte pointer
+2.  A pointer to a string (which always happens to have exactly **two characters** of which one of them is always **null**)
+3.  A string literal (which always happens to be appropriately positioned just before the string that was mentioned in point 2)
+
+A [snippet](#decompiled-code-of-the-main-method) of the main method should help better in understanding its implications.
+
+An excerpt of the memory layout of the binary, note the XREF:
+
+```c
+                             s_Lendrens_00102140                             XREF[1]:     FUN_00100b4c:00100b74 (*)
+        00102140 4c  65  6e       ds         "Lendrens"
+                 64  72  65
+                 6e  73  00
+                             DAT_00102149                                    XREF[1]:     FUN_00100b4c:00100b7b (*)
+        00102149 6b              ??         6Bh    k
+        0010214a 00              ??         00h
+                             s_Thauv'i_0010214b                              XREF[1]:     FUN_00100b4c:00100b91 (*)
+        0010214b 54  68  61       ds         "Thauv'i"
+                 75  76  27
+                 69  00
+                             DAT_00102153                                    XREF[1]:     FUN_00100b4c:00100b98 (*)
+        00102153 64              ??         64h    d
+        00102154 00              ??         00h
+                             s_Throrqiek_00102155                            XREF[1]:     FUN_00100b4c:00100bae (*)
+        00102155 54  68  72       ds         "Throrqiek"
+                 6f  72  71
+                 69  65  6b  00
+                             DAT_0010215f                                    XREF[1]:     FUN_00100b4c:00100bb5 (*)
+        0010215f 50              ??         50h    P
+        00102160 00              ??         00h
+```
+
+An excerpt from the decompiled binary
+
+```c
+  FUN_00101870(DAT_00303018,&DAT_00102149,"Lendrens");
+  FUN_00101870(DAT_00303018,&DAT_00102153,"Thauv\'i");
+  FUN_00101870(DAT_00303018,&DAT_0010215f,"Throrqiek");
+```
+
+To the keen eye, it can be observed that every string literal (i.e. the _third_ argument submitted in all the function calls) always has another single character allocated just after it in the memory. We can thus assume that there is some kind of mapping between the string literal and its corresponding character. Hence, from the memory layout above, we can ascertain that `Lendrens` corresponds to `k`, `Thauv’i` corresponds to `d`, `Throrigiek` corresponds to `P`, and so on and so forth.
+
+There is another way to observe this. Suppose we ignore the first argument in all of these function calls since it never changes and instead place more importance on the second and third arguments. You will notice that we can draw a mapping between the string literal (i.e. the third argument) and the string pointed to by the pointer (i.e. the second argument). To illustrate this as an example, let us take the first function call.
+
+```c
+FUN_00101870(DAT_00303018,&DAT_00102149,"Lendrens");
+```
+
+We can map the string literal `Lendrens` to the string that `&DAT_00102149` points to, which in this example happens to be the character “k”. Repeat this process for every other consequent function call and you will essentially end up with a full list of names mapped to some specific character.
+
+After the names have been mapped, convert the names in `output.txt` into their corresponding characters using the mappings that we have deduced earlier. Therefore, `Crerceon` will be converted into `H`, `Ezains` into `T`, `Ummuh` into `B`, and so on.
+
+Once the conversion is complete, the resulting flag obtained will be `HTB{l1n34r_t1m3_but_pr3tty_sl0w!}`.
+
+## Appendix
+
+### Decompiled code of the main method
+
+```c
+undefined8 FUN_00100b4c(void)
+{
+  DAT_00303018 = FUN_00101673(4);
+  FUN_00102120(FUN_00100aea);
+  FUN_00101870(DAT_00303018,&DAT_00102149,"Lendrens");
+  FUN_00101870(DAT_00303018,&DAT_00102153,"Thauv\'i");
+  FUN_00101870(DAT_00303018,&DAT_0010215f,"Throrqiek");
+  FUN_00101870(DAT_00303018,&DAT_00102168,"Inqods");
+  FUN_00101870(DAT_00303018,&DAT_00102172,"Tarquts");
+  FUN_00101870(DAT_00303018,&DAT_00102178,&DAT_00102174);
+  FUN_00101870(DAT_00303018,&DAT_00102182,"Krolkel");
+  FUN_00101870(DAT_00303018,&DAT_00102189,&DAT_00102184);
+  FUN_00101870(DAT_00303018,&DAT_00102194,"Dakroith");
+  FUN_00101870(DAT_00303018,&DAT_0010219e,"Creiqex");
+  FUN_00101870(DAT_00303018,&DAT_001021a8,"Thomois");
+  FUN_00101870(DAT_00303018,&DAT_001021b3,"Groz\'ens");
+  FUN_00101870(DAT_00303018,&DAT_001021bb,"Urqek");
+  FUN_00101870(DAT_00303018,&DAT_001021c1,&DAT_001021bd);
+  FUN_00101870(DAT_00303018,&DAT_001021cc,"Crerceon");
+  FUN_00101870(DAT_00303018,&DAT_001021d6,"Yonphie");
+  FUN_00101870(DAT_00303018,&DAT_001021dd,&DAT_001021d8);
+  FUN_00101870(DAT_00303018,&DAT_001021e6,"Thohul");
+  FUN_00101870(DAT_00303018,&DAT_001021f0,"Zahrull");
+  FUN_00101870(DAT_00303018,&DAT_001021f9,"Om\'ons");
+  FUN_00101870(DAT_00303018,&DAT_00102204,"Kradraks");
+  FUN_00101870(DAT_00303018,&DAT_0010220d,"Ielkul");
+  FUN_00101870(DAT_00303018,&DAT_00102216,"Vranix");
+  FUN_00101870(DAT_00303018,&DAT_0010221d,&DAT_00102218);
+  FUN_00101870(DAT_00303018,&DAT_00102229,"Craz\'ails");
+  FUN_00101870(DAT_00303018,&DAT_00102232,"Xoq\'an");
+  FUN_00101870(DAT_00303018,&DAT_00102239,&DAT_00102234);
+  FUN_00101870(DAT_00303018,&DAT_00102241,"Evods");
+  FUN_00101870(DAT_00303018,&DAT_00102249,"Taxan");
+  FUN_00101870(DAT_00303018,&DAT_00102251,"Munis");
+  FUN_00101870(DAT_00303018,&DAT_0010225c,"Trurkror");
+  FUN_00101870(DAT_00303018,&DAT_00102267,"Tulphaer");
+  FUN_00101870(DAT_00303018,&DAT_0010226e,&DAT_00102269);
+  FUN_00101870(DAT_00303018,&DAT_00102276,"Krets");
+  FUN_00101870(DAT_00303018,&DAT_0010227e,"Grons");
+  FUN_00101870(DAT_00303018,&DAT_00102287,"Ingell");
+  FUN_00101870(DAT_00303018,&DAT_00102290,"Ecruns");
+  FUN_00101870(DAT_00303018,&DAT_0010229a,"Khehlan");
+  FUN_00101870(DAT_00303018,&DAT_001022a5,"Velzaeth");
+  FUN_00101870(DAT_00303018,&DAT_001022ad,"Cuhix");
+  FUN_00101870(DAT_00303018,&DAT_001022b5,"Vinzo");
+  FUN_00101870(DAT_00303018,&DAT_001022be,"Istrur");
+  FUN_00101870(DAT_00303018,&DAT_001022c6,"Zuvas");
+  FUN_00101870(DAT_00303018,&DAT_001022cf,"Honzor");
+  FUN_00101870(DAT_00303018,&DAT_001022d9,"Ukteils");
+  FUN_00101870(DAT_00303018,&DAT_001022e2,"Baadix");
+  FUN_00101870(DAT_00303018,&DAT_001022ea,"Zonnu");
+  FUN_00101870(DAT_00303018,&DAT_001022f4,"Aarcets");
+  FUN_00101870(DAT_00303018,&DAT_001022fd,"Nevell");
+  FUN_00101870(DAT_00303018,&DAT_00102306,"Dhohmu");
+  FUN_00101870(DAT_00303018,&DAT_0010230c,&DAT_00102308);
+  FUN_00101870(DAT_00303018,&DAT_00102315,"Zissat");
+  FUN_00101870(DAT_00303018,&DAT_0010231d,"Iscax");
+  FUN_00101870(DAT_00303018,&DAT_00102328,"Pheilons");
+  FUN_00101870(DAT_00303018,&DAT_00102330,"Ghiso");
+  FUN_00101870(DAT_00303018,&DAT_0010233b,"Scrigvil");
+  FUN_00101870(DAT_00303018,&DAT_00102343,"Ummuh");
+  FUN_00101870(DAT_00303018,&DAT_0010234c,"Inphas");
+  FUN_00101870(DAT_00303018,&DAT_00102357,"Vurqails");
+  FUN_00101870(DAT_00303018,&DAT_00102362,"Vruziels");
+  FUN_00101870(DAT_00303018,&DAT_0010236c,"Ghut\'ox");
+  FUN_00101870(DAT_00303018,&DAT_00102377,"Aahroill");
+  FUN_00101870(DAT_00303018,&DAT_00102382,"Gairqeik");
+  FUN_00101870(DAT_00303018,&DAT_00102389,&DAT_00102384);
+  FUN_00101870(DAT_00303018,&DAT_00102394,"Scuvvils");
+  FUN_00101870(DAT_00303018,&DAT_0010239c,"Ohols");
+  FUN_00101870(DAT_00303018,&DAT_001023a5,"Som\'ir");
+  FUN_00101870(DAT_00303018,&DAT_001023ae,"Onzear");
+  FUN_00101870(DAT_00303018,&DAT_001023b8,"Dhaesux");
+  FUN_00101870(DAT_00303018,&DAT_001023c2,"Falnain");
+  FUN_00101870(DAT_00303018,&DAT_001023cd,"Draalpho");
+  FUN_00101870(DAT_00303018,&DAT_001023d5,"Yemor");
+  FUN_00101870(DAT_00303018,&DAT_001023e1,"Thraurgok");
+  FUN_00101870(DAT_00303018,&DAT_001023eb,"Vogeath");
+  FUN_00101870(DAT_00303018,&DAT_001023f4,"Cuzads");
+  FUN_00101870(DAT_00303018,&DAT_001023fc,"Gagro");
+  FUN_00101870(DAT_00303018,&DAT_00102402,&DAT_001023fe);
+  FUN_00101870(DAT_00303018,&DAT_0010240b,"Dhieqe");
+  FUN_00101870(DAT_00303018,&DAT_00102415,"Xustrek");
+  FUN_00101870(DAT_00303018,&DAT_0010241e,"Harned");
+  FUN_00101870(DAT_00303018,&DAT_00102428,"Dhulgea");
+  FUN_00101870(DAT_00303018,&DAT_00102430,"Zimil");
+  FUN_00101870(DAT_00303018,&DAT_0010243a,"Thretex");
+  FUN_00101870(DAT_00303018,&DAT_00102443,"Bravon");
+  FUN_00101870(DAT_00303018,&DAT_0010244f,"Krugreall");
+  FUN_00101870(DAT_00303018,&DAT_0010245a,"Vaendred");
+  FUN_00101870(DAT_00303018,&DAT_00102461,&DAT_0010245c);
+  FUN_00101870(DAT_00303018,&DAT_0010246a,"Ezains");
+  FUN_00101870(DAT_00303018,&DAT_00102473,"Mik\'ed");
+  FUN_00101870(DAT_00303018,&DAT_0010247e,"Cruz\'oll");
+  FUN_00101870(DAT_00303018,&DAT_00102488,"Dhognot");
+  FUN_00101870(DAT_00303018,&DAT_00102490,"Drids");
+  FUN_00101870(DAT_00303018,&DAT_0010249c,"Drercieks");
+  FUN_00101870(DAT_00303018,&DAT_001024a6,"Statars");
+  return 0;
+}
+```

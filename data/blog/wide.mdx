@@ -1,0 +1,31 @@
+---
+title: WIDE
+date: '2022-05-19'
+tags: ['ctf', 'htb', 'reverse', 'cyberapocalypse2022']
+draft: false
+summary: Reversing challenge featured in HTB Cyber Apocalypse 2022. The entry for the dimension has been encrypted. Can you make it inside and take control?
+images: []
+layout: PostLayout
+authors: ['trev']
+---
+
+## TL; DR
+
+The decryption key can be located in the decompiled binary. The flag is revealed as soon as the correct decryption key is entered.
+
+### Solve
+
+Very straightforward binary possibly meant to be welcoming for beginners. The binary is very lenient in letting you know that you must pass `db.ex` as an argument when executing it. Once you successfully launch it, you are given a list of dimensions to examine. The flag can be unveiled if we enter 6 as our choice and then enter the decryption key.
+
+To find the correct decryption key we must examine the decompiled binary. We notice that the string that prompts the input for the decryption key is present in `menu(long, int)`. Here, the binary accepts the key as a string and then later converts this into a wide string. After the conversion, the inputted wide string is compared to the expected key `sup3rs3cr3tw1d3`. If the keys match, the binary prints out the flag `HTB{str1ngs_4r3nt_4lw4ys_4sc11}`.
+
+The fact that the keys exist as wide strings is irrelevant to solving the problem. At best they serve as a nod to the name of the problem.
+
+```c
+printf("[X] That entry is encrypted - please enter your WIDE decryption key: ");
+fgets(local_c8,0x10,stdin);
+mbstowcs(local_1c8,local_c8,0x10);
+iVar1 = wcscmp(local_1c8,L"sup3rs3cr3tw1d3");
+```
+
+The lines above are an excerpt from `menu(long, int)` where the expected key can be seen written in-line in the source itself.
