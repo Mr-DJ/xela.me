@@ -13,6 +13,8 @@ authors: ['trev']
 
 Follow the order of the names given in `output.txt` to know which corresponding letter to pick for forming the final flag.
 
+## Solve
+
 Another simple binary which does not involve any exploits or in-depth analysis of code. In addition, the binary does not do anything when it is executed (or at least, it does not print anything at all to the terminal).
 
 This function does not have a main, or more accurately speaking, it does not have a function that is \_named \_main. Instead, it has been designated some other name so we must first analyse the entry to know where the binary begins. Upon inspection of the entry method, we find this particular line:

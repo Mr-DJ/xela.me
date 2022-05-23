@@ -13,6 +13,8 @@ authors: ['trev']
 
 One of the functions in the script decides what character to use for representing food on the grid. This function also happens to occasionally print characters of the flag. Exploit this function to retrieve the entire flag.
 
+## Solve
+
 Unlike the other problems, we are served with a `.pyc` instead. To make matters slightly more challenging, this `.pyc` has been compiled with an older version of Python - Python 2.7 to be more specific. Fortunately, [uncompyle6](https://pypi.org/project/uncompyle6/#description) can decompile bytecodes of the older Python 2.7 as well. You can find the decompiled code [here](#decompiled-bytecode).
 
 If you try running the executable, you will be met with an ImportError. The cause of this error is the missing curses package which can be downloaded separately from [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#curses). Unpack the `.pyd` files into `&lt;your Python 2.7 directory>/Python27/Lib/curses`. After fetching the necessary dependencies, you can then successfully run the executable.

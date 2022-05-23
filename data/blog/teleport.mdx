@@ -13,6 +13,8 @@ authors: ['trev']
 
 The binary reads the flag as a command line argument. An array of function pointers is used to invoke 43 different functions where each function checks a specific character in the flag.
 
+## Solve
+
 Another password-related binary again. In this binary, the password is the flag itself. The construction of the flag is rather simple but it first requires understanding some other aspects of the binary.
 
 The binary consists of an [array of 43 function pointers](#array-of-function-pointers). All of them are invoked one after the other as seen [here](#excerpt-from-decompiled-code). Each function checks a specific byte in the memory and this process is repeated for 43 different bytes.
