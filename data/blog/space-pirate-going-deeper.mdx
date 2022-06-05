@@ -1,0 +1,24 @@
+---
+title: Space pirate: Going Deeper
+date: '2022-06-06'
+tags: ['ctf','htb','pwn','cyberapocalypse2022']
+draft: false
+summary: We are right in front of the Admin Panel. Can you disable the mechanisms and take control of the Admin Panel?
+images: []
+layout: PostLayout
+authors: ['circo']
+---
+
+Unzip `pwn_sp_going_deeper.zip` to reveal a binary.
+
+Putting the binary into [Ghidra](https://ghidra-sre.org/) shows the password as `DRAEGER15th30n34nd0nly4dm1n15tr4t0R0fth15sp4c3cr4ft` as seen in the image below:
+
+![Password](/static/images/space-pirate-going-deeper/1.png)
+
+But since the `LF` char `(0x0a)` is taken into the input, `strncmp()` function call returns a non-zero result.
+
+The exploit script is as follows; By terminating the string prematurely with a null byte, the `LF` char is not included and the `strncmp()` therefore returns `0`, giving us the flag.
+
+![Exploit Script](/static/images/space-pirate-going-deeper/2.png)
+
+![Flag](/static/images/space-pirate-going-deeper/3.png)
