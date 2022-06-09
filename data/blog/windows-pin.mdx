@@ -1,0 +1,27 @@
+---
+title: Windows PIN
+date: '2022-06-09'
+tags: ['ctf', 'cellebrite', 'crypto', 'forensic']
+draft: false
+summary: Extract the crypto keys dir, the NGC dir, the user dir, security and system hives from file system and find the PIN
+images: []
+layout: PostLayout
+authors: ['circo']
+---
+
+First, extract the crypto `Keys`, `Ngc` , and `User` directories as well as the `SECURITY` and `SYSTEM` hives from the given file system.
+
+![File System](/static/images/windows-pin/1.png)
+
+Download the following two python scripts from this [repo](https://github.com/tijldeneut/dpapilab-ng).
+
+![Scripts](/static/images/windows-pin/2.png)
+
+Run the `ngcparse.py` file to get the PIN `GUIDs`. Supply the required options to the `ngccryptokeysdec.py` file (either `pinbrute` or `pinexport` depending on what is required;
+
+- `pinbrute` - brute forces the pin and
+- `pinexport` - exports the PIN as a hashcat hash with mode `28100`)
+
+This successfully returns the required PIN:
+
+![Scripts](/static/images/windows-pin/3.png)
