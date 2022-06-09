@@ -1,0 +1,24 @@
+---
+title: hmmmmm.zip
+date: '2022-06-09'
+tags: ['ctf', 'Incognito 3.0', 'reverse']
+draft: false
+summary: Reverse the zip file to extract the flag
+images: []
+layout: PostLayout
+authors: ['circo']
+---
+
+We can see weird file sizes in the `out` directory:
+
+![Out Directory](/static/images/hmmmmm-zip/1.png)
+
+Extracting this shows `Unknown method`
+
+![Extract error unknown method](/static/images/hmmmmm-zip/2.png)
+
+Going into `hxd` shows bits and pieces of the flag in reverse order as seen below.
+
+![Extract error unknown method](/static/images/hmmmmm-zip/3.png)
+
+Final flag: `ictf{damn_you_did_it_314}`
