@@ -6,6 +6,12 @@ const projectsData = [
     imgSrc: '/static/images/twitter-card.png',
     href: 'https://github.com/Mr-DJ/xela.me',
   },
+  {
+    title: 'Double Meter',
+    description: `GitHub GameOff 2022 submission. RUN as fast as you can! DODGE the traffic! Help Sinwin escape from the angry Auto and his unfazed minions.`,
+    imgSrc: '/static/images/double-meter.png',
+    href: 'https://nr-njn.itch.io/double-meter',
+  },
 ]
 
 export default projectsData
