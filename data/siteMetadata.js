@@ -1,10 +1,10 @@
 const siteMetadata = {
   title: 'Infosec Writeups',
   author: 'Samuel Jonathan',
-  headerTitle: 'x3la.xyz',
+  headerTitle: 'x3la.co',
   description: 'Generating machine walkthroughs, challenge write-ups, and infosec articles.',
   language: 'en-us',
-  siteUrl: 'https://x3la.xyz',
+  siteUrl: 'https://x3la.co',
   siteRepo: 'https://github.com/Mr-DJ/xela.me',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
