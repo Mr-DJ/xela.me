@@ -12,6 +12,12 @@ const projectsData = [
     imgSrc: '/static/images/double-meter.png',
     href: 'https://nr-njn.itch.io/double-meter',
   },
+  {
+    title: 'Biopass',
+    description: `A Chrome extension password manager with biometric two-factor authentication.`,
+    imgSrc: '/static/images/biopass-extension.png',
+    href: 'https://github.com/Mr-DJ/biopass-extension',
+  },
 ]
 
 export default projectsData
