@@ -18,6 +18,12 @@ const projectsData = [
     imgSrc: '/static/images/biopass-extension.png',
     href: 'https://github.com/Mr-DJ/biopass-extension',
   },
+  {
+    title: 'IOPTN',
+    description: `An experimental blockchain based organ donation site.`,
+    imgSrc: '/static/images/ioptn.png',
+    href: 'https://github.com/Diplo2by/cellmyorgan',
+  },
 ]
 
 export default projectsData
