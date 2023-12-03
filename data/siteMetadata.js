@@ -1,10 +1,10 @@
 const siteMetadata = {
   title: 'Infosec Writeups',
   author: 'Samuel Jonathan',
-  headerTitle: 'x3la.co',
+  headerTitle: 'x3la.win',
   description: 'Generating machine walkthroughs, challenge write-ups, and infosec articles.',
   language: 'en-us',
-  siteUrl: 'https://x3la.co',
+  siteUrl: 'https://x3la.win',
   siteRepo: 'https://github.com/Mr-DJ/xela.me',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
@@ -23,7 +23,7 @@ const siteMetadata = {
     plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
     simpleAnalytics: false, // true or false
     googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
-    umamiWebsiteId: 'f8557417-8aec-4a5d-be1b-a322330c948e', // e.g. 123e4567-e89b-12d3-a456-426614174000
+    umamiWebsiteId: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit
