@@ -1,0 +1,80 @@
+---
+title: The surface Dark Web
+date: '2023-09-14'
+tags: ['osint']
+draft: false
+summary: Social media, a risky treasure trove of freely available information.
+images: []
+layout: PostLayout
+authors: ['penguin']
+---
+
+Recently, social media has become prime hunting grounds for hackers and criminals, impacting individuals or even reaching a national level. Pentagon officials express growing concern about state-backed hackers utilizing platforms like Twitter and Facebook to infiltrate high-ranking individuals' computer networks. The exercise of such power carries significant risks.
+
+## The human zero-day exploit:
+
+Every individual is susceptible to exploitation, often through the most prevalent method known as "social engineering," typically driven by human error. With the multitude of social media platforms we frequently engage with, hackers and criminals find multiple entry points to infiltrate our systems. Let's explore some commonly known methods of [OSINT](https://osintframework.com/) (Open Source Intelligence Gathering).
+
+- Social Engineering
+- Phishing links
+- Convincing emails
+
+## Dark Web OSINT:
+
+The [Dark Web](https://en.wikipedia.org/wiki/Dark_web) can be accessed using TOR( The Onion Router) which provides a high degree of anonymization for traffic across the network. _Information can be gathered from complex supply chains across dark web markets, forums and illicit communities._
+
+![](/static/images/the-surface-dark-web/1.png)
+
+## External attack surface vectors and OSINT:
+
+Performing OSINT on the attack surface can yield valuable insights and opportunities to gather more information about the victim. This process can reveal sensitive data such as:
+
+- Corporate or individual social media profiles
+- Business directories
+- Phone records
+- Victim's email
+- Real-time location
+- Passwords (if leaked)
+
+## Google Dorking on Targets:
+
+[Google Dorks](https://en.wikipedia.org/wiki/Google_hacking) are a slightly more advanced method for open source intelligence than collecting relevant news articles or social media profiles. A specific search query is required for dorking.
+
+For example: `intitle:admbook intitle:Fversion filetype:php` would locate PHP web pages with the strings “admbook” and “Fversion” in their titles.
+
+![Locating my twitter handle.](/static/images/the-surface-dark-web/2.png)
+
+When combined with another dork containing a specific company or individual's name, this method can uncover all publicly available data associated with that name, including information that misconfigured permissions may have inadvertently rendered publicly accessible.
+
+## Data Dumps:
+
+A data dump typically involves transferring a large amount of data or files between two systems over a connected network. Consequently, it's relatively easier to find individuals along with their email addresses, passwords, and occasionally their addresses and credit/debit card information.
+
+![](/static/images/the-surface-dark-web/3.png)
+
+## Tools:
+
+Tools can be used for extensive research purposes. Listed below are some for their specific use-cases:
+
+- [SEON](https://seon.io/) - Confirming someone's identity by checking for linked social media and online platform accounts.
+- [EPIEOS](https://epieos.com/) - Allows reverse email/phone search, using Holehe for precise search operations.
+- [Recon-ng](https://www.kali.org/tools/recon-ng/) - Accessible via command-line interface on Kali Linux or as a web application. Used to assess and identify web vulnerabilities, perform GeoIP lookup, DNS lookup, and port scanning.
+- [SpiderFoot](https://www.spiderfoot.net/attack-surface-monitoring/) - Performs regular asset discovery or attack surface monitoring.
+- [Have I Been Pwnd](https://haveibeenpwned.com/) - Confirms if your email has been leaked in an email data breach.
+- [PhoneInfoga](https://github.com/sundowndev/phoneinfoga) - Open-source tool for OSINT for phone number lookups.
+
+## Prevention:
+
+Internet users have long relied on basic cybersecurity measures such as antivirus software and a firewall. However, in the age of social media, more serious security measures are necessary. Below are some crucial steps:
+
+- Two-step verification must be used
+- Update contact details
+- Keep accounts private if under 18 years old
+- Do not click on random links/emails
+- Avoid posting or sharing private information
+- Avoid leaking email and phone numbers
+- Update software immediately upon release
+
+# Summary:
+
+Social media platforms have turned into breeding grounds for hacking activities. Acknowledging these threats and understanding their methods empowers us to protect ourselves. Engaging with suspicious links and adding unfamiliar individuals poses significant risks. Equally perilous is the information we inadvertently expose. Security begins with awareness and evolves through constant vigilance. Adopting new tools like two-factor verification strengthens our defense against hackers attempting to infiltrate our accounts.
