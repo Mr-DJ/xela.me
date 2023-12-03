@@ -3,7 +3,7 @@ name: Samuel Jonathan
 avatar: /static/images/avatar.png
 occupation: Cybersecurity Engineer | CTF Player
 # company: discord university
-email: jonathandinesh@gmail.com
+email: root@x3la.win
 twitter: https://twitter.com/cyka_sam
 github: https://github.com/Mr-DJ
 discord: https://www.discord.gg/rqVKvVe

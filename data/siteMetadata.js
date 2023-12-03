@@ -9,7 +9,7 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
-  email: 'jonathandinesh@gmail.com',
+  email: 'root@x3la.win',
   github: 'https://github.com/Mr-DJ',
   twitter: 'https://twitter.com/cyka_sam',
   // facebook: 'https://facebook.com',
