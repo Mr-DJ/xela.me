@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xela-me.vercel.app/sitemap.xml
+Sitemap: https://www.x3la.win/sitemap.xml
