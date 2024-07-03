@@ -1,0 +1,86 @@
+---
+title: Be Defended
+date: '2024-07-03'
+tags: ['Malware', 'Evasion']
+draft: false
+summary: Defend yourself from malwares
+images: []
+layout: PostLayout
+authors: ['penguin']
+---
+
+The Operating System (OS) consists of many services that help run applications and processes smoothly. The OS has a built-in tool to view all services together in one window, commonly known as Task Manager. Task Manager offers us insights into performance, system services, processes, startup apps, and more.
+
+Many times, a computer is infected with viruses or malware without the user's awareness. Locating the malicious service can be quite difficult among other legitimate services/processes. Malware can impersonate legitimate services, and Windows Task Manager may mistakenly flag these as legitimate. Symptoms of infection include high performance issues, popup ads, unauthorized activities, low storage, and changes in appearance.
+
+Let's take a deeper look into how services get launched, how to detect unusual services through vigilance, and how to evade malware.
+
+### The Service Control Manager | services.exe
+
+The Service Control Manager (SCM) is a system process that runs the image "services.exe" from the "System32" folder. It is responsible for running and managing services on the system. Windows Services broadly fall into three categories based on their actions and applications: Local Services, Network Services, and System Services. Services can be deleted by a user with administrative privileges, but caution is advised as it can render the OS unstable.
+
+### Launch Mechanism
+
+A regular application is manually launched by the end user from the desktop or Start Menu. Examples include web browsers, document editing software, and PDF readers. Windows Services start when the machine is switched on.
+
+### System Startup Launch Mechanism
+
+Applications in the startup folder launch when Windows starts, making it convenient for users to run essential applications without manual intervention.
+
+### Startup Folder Locations
+
+- All Users: `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup`
+
+- Current User: `C:\Users\[Username]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`
+
+### Common Windows Services
+
+- Active Directory Service: Developed by Microsoft for Windows networks and included by default in most Windows Servers.
+
+- Prefetch and Superfetch Service: Speeds up the OS and applications by caching frequently used files, libraries, and app components in RAM.
+
+- DNS Client Service: Resolves domain names to IP addresses and locally caches this data.
+
+- Internet Connection Sharing (ICS) Service: Enables the use of one internet-connected device as an access point for other devices.
+
+### Detection | malware.exe
+
+Using antivirus software is essential to detect malware in the system. Regular scans can reveal hidden malware and remove it. Choosing the right antivirus software can save your digital life.
+
+The startup folder is vulnerable to malware. Regularly check it for unusual services and remove any suspicious entries. Verify the digital signatures of services and compare them against known malware hashes.
+
+Windows Task Manager (`Ctrl + Shift + Esc`) can also be used to locate malware. Infected systems often use more RAM/CPU, making it easier to spot malicious processes. You can enable or disable startup services directly from Task Manager. Tools like MSConfig or third-party startup managers can help identify unfamiliar or suspicious entries.
+
+### Evasion
+
+After locating the malware or unusual services, use antivirus software to delete or quarantine the malware. If the malware persists, you can install a clean image of the OS (ensure to keep a backup of your data) or restore from a previously backed-up image (verify that it is malware-free).
+
+### Mitigation and Protection
+
+- Regular Monitoring: Monitor system performance for unusual slowdowns or issues that might indicate malware activity.
+
+- Use of Antivirus Software: Antivirus tools can often detect and remove malware.
+
+- Regular Software Updates: Keep the OS and software updated with the latest security patches to evade common malware.
+
+- Limited User Accounts: Use the Least Privilege Principle, which encourages the use of standard user accounts for daily activities and reserves administrative privileges for specific tasks to reduce the risk of unauthorized changes.
+
+### Conclusion
+
+By understanding the purpose and potential risks associated with the OS, one can effectively evade security vulnerabilities. Regular vigilance, use of robust security tools, and adherence to best practices are key to maintaining a secure computing environment.
+
+## Summary
+
+- Service Control Manager (SCM): Manages system services via "services.exe," which fall into Local, Network, and System Services.
+
+- Launch Mechanism: Regular applications are manually launched, while Windows Services start automatically when the system boots.
+
+- Startup Folder Locations: Applications in the startup folders (`C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup` for all users and `C:\Users\[Username]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` for the current user) launch automatically with Windows.
+
+- Common Windows Services: Includes Active Directory Service, Prefetch and Superfetch Service, DNS Client Service, and Internet Connection Sharing (ICS) Service.
+
+- Detection: Use antivirus software for regular scans, inspect the startup folder for unusual services, and utilize Windows Task Manager (`Ctrl + Shift + Esc`) to identify processes with high RAM/CPU usage.
+
+- Evasion: Remove malware using antivirus tools or by reinstalling a clean OS image or restoring from a malware-free backup.
+
+- Mitigation and Protection: Regularly monitor system performance, keep antivirus software updated, apply software updates, and use standard user accounts for daily activities to reduce risks.
