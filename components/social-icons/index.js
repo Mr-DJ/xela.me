@@ -21,21 +21,35 @@ const components = {
 }
 
 const SocialIcon = ({ kind, href, size = 8 }) => {
-  if (!href || (kind === 'mail' && !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(href)))
+  // Ensure kind and href are strings
+  const safeKind = typeof kind === 'string' ? kind : String(kind || '')
+  const safeHref = typeof href === 'string' ? href : String(href || '')
+  const safeSize =
+    typeof size === 'number' ? size : typeof size === 'string' ? parseInt(size, 10) || 8 : 8
+
+  if (
+    !safeHref ||
+    (safeKind === 'mail' && !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(safeHref))
+  )
     return null
 
-  const SocialSvg = components[kind]
+  const SocialSvg = components[safeKind]
+
+  // Ensure SocialSvg is a valid React component
+  if (!SocialSvg || typeof SocialSvg !== 'function') {
+    return null
+  }
 
   return (
     <a
       className="text-sm text-gray-500 transition hover:text-gray-600"
       target="_blank"
       rel="noopener noreferrer"
-      href={href}
+      href={safeHref}
     >
-      <span className="sr-only">{kind}</span>
+      <span className="sr-only">{safeKind}</span>
       <SocialSvg
-        className={`fill-current text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 h-${size} w-${size}`}
+        className={`fill-current text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 h-${safeSize} w-${safeSize}`}
       />
     </a>
   )
