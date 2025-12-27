@@ -13,8 +13,7 @@ const Utterances = ({ issueTerm }) => {
 
   const COMMENTS_ID = 'comments-container'
 
-  const LoadComments = useCallback(() => {
-    setEnabledLoadComments(false)
+  const loadScript = useCallback(() => {
     const script = document.createElement('script')
     script.src = 'https://utteranc.es/client.js'
     script.setAttribute('repo', siteMetadata.comment.utterancesConfig.repo)
@@ -26,19 +25,23 @@ const Utterances = ({ issueTerm }) => {
 
     const comments = document.getElementById(COMMENTS_ID)
     if (comments) comments.appendChild(script)
-
-    return () => {
-      const comments = document.getElementById(COMMENTS_ID)
-      if (comments) comments.innerHTML = ''
-    }
   }, [commentsTheme, issueTerm])
+
+  const LoadComments = useCallback(() => {
+    setEnabledLoadComments(false)
+    loadScript()
+  }, [loadScript])
 
   // Reload on theme change
   useEffect(() => {
     const iframe = document.querySelector('iframe.utterances-frame')
     if (!iframe) return
-    LoadComments()
-  }, [LoadComments])
+
+    // Clear existing comments and reload with new theme
+    const comments = document.getElementById(COMMENTS_ID)
+    if (comments) comments.innerHTML = ''
+    loadScript()
+  }, [loadScript])
 
   // Added `relative` to fix a weird bug with `utterances-frame` position
   return (

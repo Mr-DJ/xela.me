@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import { useMemo } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
 import Image from './Image'
@@ -20,6 +19,9 @@ export const MDXComponents = {
 }
 
 export const MDXLayoutRenderer = ({ layout, mdxSource, ...rest }) => {
+  // getMDXComponent creates a component from the bundled MDX source
+  // This is the required pattern for mdx-bundler - the component must be created from source
+
   const MDXLayout = useMemo(() => getMDXComponent(mdxSource), [mdxSource])
 
   return <MDXLayout layout={layout} components={MDXComponents} {...rest} />

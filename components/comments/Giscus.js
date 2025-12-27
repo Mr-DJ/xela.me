@@ -15,8 +15,7 @@ const Giscus = ({ mapping }) => {
 
   const COMMENTS_ID = 'comments-container'
 
-  const LoadComments = useCallback(() => {
-    setEnabledLoadComments(false)
+  const loadScript = useCallback(() => {
     const script = document.createElement('script')
     script.src = 'https://giscus.app/client.js'
     script.setAttribute('data-repo', siteMetadata.comment.giscusConfig.repo)
@@ -32,19 +31,23 @@ const Giscus = ({ mapping }) => {
 
     const comments = document.getElementById(COMMENTS_ID)
     if (comments) comments.appendChild(script)
-
-    return () => {
-      const comments = document.getElementById(COMMENTS_ID)
-      if (comments) comments.innerHTML = ''
-    }
   }, [commentsTheme, mapping])
+
+  const LoadComments = useCallback(() => {
+    setEnabledLoadComments(false)
+    loadScript()
+  }, [loadScript])
 
   // Reload on theme change
   useEffect(() => {
     const iframe = document.querySelector('iframe.giscus-frame')
     if (!iframe) return
-    LoadComments()
-  }, [LoadComments])
+
+    // Clear existing comments and reload with new theme
+    const comments = document.getElementById(COMMENTS_ID)
+    if (comments) comments.innerHTML = ''
+    loadScript()
+  }, [loadScript])
 
   return (
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">

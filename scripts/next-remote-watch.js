@@ -34,7 +34,7 @@ program
   .parse(process.argv)
 
 const shell = process.env.SHELL
-const app = next({ dev: true, dir: program.root || process.cwd() })
+const app = next({ dev: true, dir: program.root || process.cwd(), webpack: true })
 const port = parseInt(process.env.PORT, 10) || 3000
 const handle = app.getRequestHandler()
 

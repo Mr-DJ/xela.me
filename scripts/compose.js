@@ -27,15 +27,21 @@ const genFrontMatter = (answers) => {
     ('0' + (d.getMonth() + 1)).slice(-2),
     ('0' + d.getDate()).slice(-2),
   ].join('-')
-  const tagArray = answers.tags.split(',')
-  tagArray.forEach((tag, index) => (tagArray[index] = tag.trim()))
-  const tags = "'" + tagArray.join("','") + "'"
+
+  // Handle tags - split by comma and trim, filter out empty strings
+  const tagArray = answers.tags
+    ? answers.tags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0)
+    : []
+  const tags = tagArray.length > 0 ? "'" + tagArray.join("','") + "'" : ''
   const authorArray = answers.authors.length > 0 ? "'" + answers.authors.join("','") + "'" : ''
 
   let frontMatter = dedent`---
   title: ${answers.title ? answers.title : 'Untitled'}
   date: '${date}'
-  tags: [${answers.tags ? tags : ''}]
+  tags: [${tags}]
   draft: ${answers.draft === 'yes' ? true : false}
   summary: ${answers.summary ? answers.summary : ' '}
   images: []
@@ -106,9 +112,15 @@ inquirer
     }`
     fs.writeFile(filePath, frontMatter, { flag: 'wx' }, (err) => {
       if (err) {
-        throw err
+        if (err.code === 'EEXIST') {
+          console.error(`Error: File ${filePath} already exists!`)
+        } else {
+          console.error(`Error creating file: ${err.message}`)
+        }
+        process.exit(1)
       } else {
         console.log(`Blog post generated successfully at ${filePath}`)
+        console.log(`\nYou can now edit the file and add your content.`)
       }
     })
   })
@@ -116,6 +128,8 @@ inquirer
     if (error.isTtyError) {
       console.log("Prompt couldn't be rendered in the current environment")
     } else {
-      console.log('Something went wrong, sorry!')
+      console.error('Something went wrong, sorry!')
+      console.error(error.message)
     }
+    process.exit(1)
   })
