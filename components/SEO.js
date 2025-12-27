@@ -4,26 +4,30 @@ import siteMetadata from '@/data/siteMetadata'
 
 const CommonSEO = ({ title, description, ogType, ogImage, twImage }) => {
   const router = useRouter()
+  const ogImageContent = Array.isArray(ogImage) ? (
+    ogImage.map(({ url }) => <meta property="og:image" content={url} key={url} />)
+  ) : ogImage && typeof ogImage === 'string' ? (
+    <meta property="og:image" content={ogImage} key={ogImage} />
+  ) : null
+
+  const routerPath = router?.asPath || ''
+
   return (
     <Head>
-      <title>{title}</title>
+      <title>{title || ''}</title>
       <meta name="robots" content="follow, index" />
-      <meta name="description" content={description} />
-      <meta property="og:url" content={`${siteMetadata.siteUrl}${router.asPath}`} />
-      <meta property="og:type" content={ogType} />
+      <meta name="description" content={description || ''} />
+      <meta property="og:url" content={`${siteMetadata.siteUrl}${routerPath}`} />
+      <meta property="og:type" content={ogType || 'website'} />
       <meta property="og:site_name" content={siteMetadata.title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:title" content={title} />
-      {ogImage.constructor.name === 'Array' ? (
-        ogImage.map(({ url }) => <meta property="og:image" content={url} key={url} />)
-      ) : (
-        <meta property="og:image" content={ogImage} key={ogImage} />
-      )}
+      <meta property="og:description" content={description || ''} />
+      <meta property="og:title" content={title || ''} />
+      {ogImageContent}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content={siteMetadata.twitter} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={twImage} />
+      <meta name="twitter:site" content={siteMetadata.twitter || ''} />
+      <meta name="twitter:title" content={title || ''} />
+      <meta name="twitter:description" content={description || ''} />
+      <meta name="twitter:image" content={twImage || ''} />
     </Head>
   )
 }
@@ -33,11 +37,11 @@ export const PageSEO = ({ title, description }) => {
   const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   return (
     <CommonSEO
-      title={title}
-      description={description}
+      title={title || ''}
+      description={description || ''}
       ogType="website"
-      ogImage={ogImageUrl}
-      twImage={twImageUrl}
+      ogImage={ogImageUrl || ''}
+      twImage={twImageUrl || ''}
     />
   )
 }
@@ -46,21 +50,22 @@ export const TagSEO = ({ title, description }) => {
   const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   const router = useRouter()
+  const routerPath = router?.asPath || ''
   return (
     <>
       <CommonSEO
-        title={title}
-        description={description}
+        title={title || ''}
+        description={description || ''}
         ogType="website"
-        ogImage={ogImageUrl}
-        twImage={twImageUrl}
+        ogImage={ogImageUrl || ''}
+        twImage={twImageUrl || ''}
       />
       <Head>
         <link
           rel="alternate"
           type="application/rss+xml"
-          title={`${description} - RSS feed`}
-          href={`${siteMetadata.siteUrl}${router.asPath}/feed.xml`}
+          title={`${description || ''} - RSS feed`}
+          href={`${siteMetadata.siteUrl}${routerPath}/feed.xml`}
         />
       </Head>
     </>
@@ -137,7 +142,7 @@ export const BlogSEO = ({ authorDetails, title, summary, date, lastmod, url, ima
       <Head>
         {date && <meta property="article:published_time" content={publishedAt} />}
         {lastmod && <meta property="article:modified_time" content={modifiedAt} />}
-        <link rel="canonical" href={`${siteMetadata.siteUrl}${router.asPath}`} />
+        <link rel="canonical" href={`${siteMetadata.siteUrl}${router?.asPath || url || ''}`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -39,15 +39,20 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Tag({ posts, tag }) {
+  // Ensure tag is a string
+  const safeTag = typeof tag === 'string' ? tag : String(tag || '')
   // Capitalize first letter and convert space to dash
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+  const title =
+    safeTag && safeTag.length > 0
+      ? safeTag[0].toUpperCase() + safeTag.split(' ').join('-').slice(1)
+      : safeTag
   return (
     <>
       <TagSEO
-        title={`${tag} - ${siteMetadata.author}`}
-        description={`${tag} tags - ${siteMetadata.author}`}
+        title={`${safeTag} - ${siteMetadata.author}`}
+        description={`${safeTag} tags - ${siteMetadata.author}`}
       />
-      <ListLayout posts={posts} title={title} />
+      <ListLayout posts={posts || []} title={title} />
     </>
   )
 }

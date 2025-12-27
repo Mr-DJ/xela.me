@@ -1,6 +1,6 @@
+import React from 'react'
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
 import Link from './Link'
 import SectionContainer from './SectionContainer'
 import Footer from './Footer'
@@ -19,8 +19,12 @@ const LayoutWrapper = ({ children }) => {
                   <div className="h-6 text-2xl font-semibold sm:block">
                     {siteMetadata.headerTitle}
                   </div>
-                ) : (
+                ) : React.isValidElement(siteMetadata.headerTitle) ? (
                   siteMetadata.headerTitle
+                ) : (
+                  <div className="h-6 text-2xl font-semibold sm:block">
+                    {String(siteMetadata.headerTitle || '')}
+                  </div>
                 )}
               </div>
             </Link>
