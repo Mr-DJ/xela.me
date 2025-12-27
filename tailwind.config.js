@@ -59,12 +59,6 @@ module.exports = {
               paddingBottom: '2px',
               borderRadius: '0.25rem',
             },
-            'code:before': {
-              content: 'none',
-            },
-            'code:after': {
-              content: 'none',
-            },
             details: {
               backgroundColor: theme('colors.gray.100'),
               paddingLeft: '4px',
@@ -85,6 +79,54 @@ module.exports = {
             blockquote: {
               color: theme('colors.gray.900'),
               borderLeftColor: theme('colors.gray.200'),
+            },
+            table: {
+              width: '100%',
+              borderCollapse: 'collapse',
+              marginTop: '1.5em',
+              marginBottom: '1.5em',
+            },
+            thead: {
+              borderBottom: `2px solid ${theme('colors.gray.300')}`,
+            },
+            'thead th': {
+              color: theme('colors.gray.900'),
+              fontWeight: '600',
+              textAlign: 'left',
+              paddingTop: '0.75em',
+              paddingBottom: '0.75em',
+              paddingLeft: '0.75em',
+              paddingRight: '0.75em',
+            },
+            'tbody tr': {
+              borderBottom: `1px solid ${theme('colors.gray.200')}`,
+            },
+            'tbody td': {
+              paddingTop: '0.75em',
+              paddingBottom: '0.75em',
+              paddingLeft: '0.75em',
+              paddingRight: '0.75em',
+            },
+            'tbody tr:last-child': {
+              borderBottom: 'none',
+            },
+            pre: {
+              color: '#e5e5e5',
+              backgroundColor: '#262626',
+            },
+            // Remove backticks from inline code - use 'none' instead of empty string
+            'code:before': {
+              content: 'none',
+            },
+            'code:after': {
+              content: 'none',
+            },
+            // Ensure code inside pre doesn't have backticks
+            'pre code:before': {
+              content: 'none',
+            },
+            'pre code:after': {
+              content: 'none',
             },
           },
         },
@@ -141,6 +183,28 @@ module.exports = {
             blockquote: {
               color: theme('colors.gray.100'),
               borderLeftColor: theme('colors.gray.700'),
+            },
+            'thead th': {
+              color: theme('colors.gray.100'),
+              fontWeight: '600',
+            },
+            pre: {
+              color: '#e5e5e5',
+              backgroundColor: '#262626',
+            },
+            // Remove backticks from inline code - use 'none' instead of empty string
+            'code:before': {
+              content: 'none',
+            },
+            'code:after': {
+              content: 'none',
+            },
+            // Ensure code inside pre doesn't have backticks
+            'pre code:before': {
+              content: 'none',
+            },
+            'pre code:after': {
+              content: 'none',
             },
           },
         },
