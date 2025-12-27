@@ -8,6 +8,13 @@ module.exports = withBundleAnalyzer({
   experimental: { esmExternals: true },
   turbopack: {},
   webpack: (config, { dev, isServer }) => {
+    // Find and exclude SVGs from Next.js default file loader
+    config.module.rules.forEach((rule) => {
+      if (rule.test && rule.test.toString().includes('svg')) {
+        rule.exclude = /\.svg$/i
+      }
+    })
+
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|mp4)$/i,
       use: [
@@ -21,9 +28,22 @@ module.exports = withBundleAnalyzer({
       ],
     })
 
+    // Configure SVG loader to use @svgr/webpack
     config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            svgo: false,
+            titleProp: true,
+            ref: true,
+            typescript: false,
+            dimensions: false,
+          },
+        },
+      ],
     })
 
     if (!dev && !isServer) {
