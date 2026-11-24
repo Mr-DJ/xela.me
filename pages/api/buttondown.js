@@ -1,8 +1,12 @@
+import { isValidEmail, readEmail, requirePost } from '@/lib/utils/api'
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
-  const { email } = req.body
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required' })
+  if (!requirePost(req, res)) return
+
+  const email = readEmail(req)
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: 'A valid email is required' })
   }
 
   try {

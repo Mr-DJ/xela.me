@@ -1,7 +1,10 @@
-const fs = require('fs')
-const path = require('path')
-const matter = require('gray-matter')
-const globby = require('globby')
+import fs from 'node:fs'
+import path from 'node:path'
+
+import matter from 'gray-matter'
+
+import siteMetadata from '../data/siteMetadata.js'
+import { getAllFilesRecursively } from './utils.mjs'
 
 const root = process.cwd()
 
@@ -14,25 +17,6 @@ const escape = (str) => {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')
-}
-
-// Load site metadata
-const siteMetadata = require('../data/siteMetadata')
-
-// Recursively get all files
-function getAllFilesRecursively(dir) {
-  let results = []
-  const list = fs.readdirSync(dir)
-  list.forEach((file) => {
-    const filePath = path.join(dir, file)
-    const stat = fs.statSync(filePath)
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getAllFilesRecursively(filePath))
-    } else {
-      results.push(filePath)
-    }
-  })
-  return results
 }
 
 // Format slug

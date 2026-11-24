@@ -1,7 +1,8 @@
-const fs = require('fs')
-const path = require('path')
-const inquirer = require('inquirer')
-const dedent = require('dedent')
+import fs from 'node:fs'
+import path from 'node:path'
+
+import dedent from 'dedent'
+import inquirer from 'inquirer'
 
 const root = process.cwd()
 
@@ -57,8 +58,8 @@ const genFrontMatter = (answers) => {
   return frontMatter
 }
 
-inquirer
-  .prompt([
+try {
+  const answers = await inquirer.prompt([
     {
       name: 'title',
       message: 'Enter post title:',
@@ -74,7 +75,7 @@ inquirer
       name: 'authors',
       message: 'Choose authors:',
       type: 'checkbox',
-      choices: getAuthors,
+      choices: getAuthors(),
     },
     {
       name: 'summary',
@@ -96,40 +97,32 @@ inquirer
       name: 'layout',
       message: 'Select layout',
       type: 'list',
-      choices: getLayouts,
+      choices: getLayouts(),
     },
   ])
-  .then((answers) => {
-    // Remove special characters and replace space with -
-    const fileName = answers.title
-      .toLowerCase()
-      .replace(/[^a-zA-Z0-9 ]/g, '')
-      .replace(/ /g, '-')
-      .replace(/-+/g, '-')
-    const frontMatter = genFrontMatter(answers)
-    const filePath = `data/blog/${fileName ? fileName : 'untitled'}.${
-      answers.extension ? answers.extension : 'md'
-    }`
-    fs.writeFile(filePath, frontMatter, { flag: 'wx' }, (err) => {
-      if (err) {
-        if (err.code === 'EEXIST') {
-          console.error(`Error: File ${filePath} already exists!`)
-        } else {
-          console.error(`Error creating file: ${err.message}`)
-        }
-        process.exit(1)
-      } else {
-        console.log(`Blog post generated successfully at ${filePath}`)
-        console.log(`\nYou can now edit the file and add your content.`)
-      }
-    })
-  })
-  .catch((error) => {
-    if (error.isTtyError) {
-      console.log("Prompt couldn't be rendered in the current environment")
-    } else {
-      console.error('Something went wrong, sorry!')
-      console.error(error.message)
-    }
-    process.exit(1)
-  })
+
+  // Remove special characters and replace space with -
+  const fileName = answers.title
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9 ]/g, '')
+    .replace(/ /g, '-')
+    .replace(/-+/g, '-')
+  const frontMatter = genFrontMatter(answers)
+  const filePath = `data/blog/${fileName ? fileName : 'untitled'}.${
+    answers.extension ? answers.extension : 'md'
+  }`
+
+  fs.writeFileSync(filePath, frontMatter, { flag: 'wx' })
+  console.log(`Blog post generated successfully at ${filePath}`)
+  console.log(`\nYou can now edit the file and add your content.`)
+} catch (error) {
+  if (error.code === 'EEXIST') {
+    console.error(`Error: File data/blog/${error.path.split('/').pop()} already exists!`)
+  } else if (error.code === 'ENOENT') {
+    console.error(`Error creating file: ${error.message}`)
+  } else {
+    console.error('Something went wrong, sorry!')
+    console.error(error.message)
+  }
+  process.exit(1)
+}

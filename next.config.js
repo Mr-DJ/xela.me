@@ -4,57 +4,22 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
+  poweredByHeader: false,
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
-  experimental: { esmExternals: true },
-  turbopack: {},
-  webpack: (config, { dev, isServer }) => {
-    // Find and exclude SVGs from Next.js default file loader
-    config.module.rules.forEach((rule) => {
-      if (rule.test && rule.test.toString().includes('svg')) {
-        rule.exclude = /\.svg$/i
-      }
-    })
-
-    config.module.rules.push({
-      test: /\.(png|jpe?g|gif|mp4)$/i,
-      use: [
-        {
-          loader: 'file-loader',
-          options: {
-            publicPath: '/_next',
-            name: 'static/media/[name].[hash].[ext]',
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
-        },
-      ],
-    })
-
-    // Configure SVG loader to use @svgr/webpack
-    config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      use: [
-        {
-          loader: '@svgr/webpack',
-          options: {
-            svgo: false,
-            titleProp: true,
-            ref: true,
-            typescript: false,
-            dimensions: false,
-          },
-        },
-      ],
-    })
-
-    if (!dev && !isServer) {
-      // Replace React with Preact only in client production build
-      Object.assign(config.resolve.alias, {
-        react: 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react-dom': 'preact/compat',
-      })
-    }
-
-    return config
+        ],
+      },
+    ]
   },
 })

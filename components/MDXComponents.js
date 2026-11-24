@@ -1,10 +1,20 @@
 import { useMemo } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
+
+import PostLayout from '@/layouts/PostLayout'
+import PostSimple from '@/layouts/PostSimple'
+import AuthorLayout from '@/layouts/AuthorLayout'
 import Image from './Image'
 import CustomLink from './Link'
 import TOCInline from './TOCInline'
 import Pre from './Pre'
 import { BlogNewsletterForm } from './NewsletterForm'
+
+const layouts = {
+  PostLayout,
+  PostSimple,
+  AuthorLayout,
+}
 
 export const MDXComponents = {
   Image,
@@ -12,20 +22,13 @@ export const MDXComponents = {
   a: CustomLink,
   pre: Pre,
   BlogNewsletterForm: BlogNewsletterForm,
-  wrapper: ({ components, layout, ...rest }) => {
-    if (!layout) {
-      return <div {...rest} />
+  wrapper: ({ components, layout, children, ...rest }) => {
+    const Layout = layouts[layout]
+    if (!Layout) {
+      console.error(`Unknown MDX layout: ${layout}`)
+      return <div>{children}</div>
     }
-    try {
-      const Layout = require(`../layouts/${layout}`).default
-      if (!Layout) {
-        return <div {...rest} />
-      }
-      return <Layout {...rest} />
-    } catch (error) {
-      console.error(`Failed to load layout: ${layout}`, error)
-      return <div {...rest} />
-    }
+    return <Layout {...rest}>{children}</Layout>
   },
 }
 

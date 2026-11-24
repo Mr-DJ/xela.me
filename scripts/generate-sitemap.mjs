@@ -1,25 +1,26 @@
-const fs = require('fs')
-const globby = require('globby')
-const prettier = require('prettier')
-const siteMetadata = require('../data/siteMetadata')
+import fs from 'node:fs'
 
-;(async () => {
-  const prettierConfig = await prettier.resolveConfig('./prettier.config.js')
-  const pages = await globby([
-    'pages/*.js',
-    'data/blog/**/*.mdx',
-    'data/blog/**/*.md',
-    'public/tags/**/*.xml',
-    '!pages/_*.js',
-    '!pages/api',
-  ])
+import { format, resolveConfig } from 'prettier'
 
-  const sitemap = `
+import siteMetadata from '../data/siteMetadata.js'
+import { getAllFilesRecursively } from './utils.mjs'
+
+const prettierConfig = await resolveConfig('./prettier.config.js')
+const pages = [
+  ...fs
+    .readdirSync('pages')
+    .filter((file) => file.endsWith('.js') && !file.startsWith('_'))
+    .map((file) => `pages/${file}`),
+  ...getAllFilesRecursively('data/blog').filter((file) => /\.(md|mdx)$/.test(file)),
+  ...getAllFilesRecursively('public/tags').filter((file) => file.endsWith('.xml')),
+]
+
+const sitemap = `
         <?xml version="1.0" encoding="UTF-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
             ${pages
               .map((page) => {
-                const path = page
+                const routePath = page
                   .replace('pages/', '/')
                   .replace('data/blog', '/blog')
                   .replace('public/', '/')
@@ -27,7 +28,7 @@ const siteMetadata = require('../data/siteMetadata')
                   .replace('.mdx', '')
                   .replace('.md', '')
                   .replace('/feed.xml', '')
-                const route = path === '/index' ? '' : path
+                const route = routePath === '/index' ? '' : routePath
                 if (page === `pages/404.js` || page === `pages/blog/[...slug].js`) {
                   return
                 }
@@ -41,11 +42,9 @@ const siteMetadata = require('../data/siteMetadata')
         </urlset>
     `
 
-  const formatted = prettier.format(sitemap, {
-    ...prettierConfig,
-    parser: 'html',
-  })
+const formatted = await format(sitemap, {
+  ...prettierConfig,
+  parser: 'html',
+})
 
-  // eslint-disable-next-line no-sync
-  fs.writeFileSync('public/sitemap.xml', formatted)
-})()
+fs.writeFileSync('public/sitemap.xml', formatted)

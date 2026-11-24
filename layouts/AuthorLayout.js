@@ -33,7 +33,9 @@ export default function AuthorLayout({ children, frontMatter }) {
               <SocialIcon kind="discord" href={discord} />
             </div>
           </div>
-          <div className="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2">{children}</div>
+          <div className="pt-8 pb-8 prose dark:prose-invert max-w-none xl:col-span-2">
+            {children}
+          </div>
         </div>
       </div>
     </>
