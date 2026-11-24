@@ -21,7 +21,7 @@ const MobileNav = () => {
     <div className="sm:hidden">
       <button
         type="button"
-        className="w-10 h-10 ml-1 mr-1 rounded flex cursor-pointer bg-transparent outline-none"
+        className="w-10 h-10 ml-1 mr-1 rounded-sm flex cursor-pointer bg-transparent outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
         aria-label="Toggle Menu"
         onClick={onToggleNav}
       >
@@ -49,9 +49,11 @@ const MobileNav = () => {
       >
         <button
           type="button"
+          aria-hidden="true"
           aria-label="toggle modal"
-          className="fixed w-full h-full cursor-auto focus:outline-none"
+          className="fixed w-full h-full cursor-auto focus:outline-hidden"
           onClick={onToggleNav}
+          tabIndex={-1}
         ></button>
         <nav className="fixed h-full mt-8">
           {headerNavLinks.map((link) => (

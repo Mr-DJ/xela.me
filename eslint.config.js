@@ -2,6 +2,7 @@ const js = require('@eslint/js')
 const prettier = require('eslint-plugin-prettier')
 const nextPlugin = require('eslint-config-next/core-web-vitals')
 const prettierConfig = require('eslint-config-prettier')
+const globals = require('globals')
 
 module.exports = [
   js.configs.recommended,
@@ -39,6 +40,13 @@ module.exports = [
     },
   },
   {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: { ...globals.node },
+      sourceType: 'module',
+    },
+  },
+  {
     ignores: [
       'node_modules/**',
       '.next/**',
@@ -47,7 +55,6 @@ module.exports = [
       'dist/**',
       'public/**',
       '*.config.js',
-      'scripts/**',
     ],
   },
 ]

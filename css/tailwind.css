@@ -1,10 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+@config '../tailwind.config.js';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../pages/**/*.{js,jsx,md,mdx}';
+@source '../components/**/*.{js,jsx}';
+@source '../layouts/**/*.js';
+@source '../lib/**/*.js';
+@source '../data/**/*.{md,mdx}';
 
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Preserve Tailwind v3's default border color */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e5e5e5;
   }
 }
 
@@ -32,7 +49,9 @@ html {
 
 .ham .line {
   fill: none;
-  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+  transition:
+    stroke-dasharray 400ms,
+    stroke-dashoffset 400ms;
   stroke: currentColor;
   stroke-width: 5.5;
   stroke-linecap: round;
@@ -48,7 +67,9 @@ html {
 .ham .bottom {
   stroke-dasharray: 40 85;
   transform-origin: 50%;
-  transition: transform 400ms, stroke-dashoffset 400ms;
+  transition:
+    transform 400ms,
+    stroke-dashoffset 400ms;
 }
 .ham.active .top {
   stroke-dashoffset: -64px;
@@ -60,13 +81,50 @@ html {
   stroke-dashoffset: -64px;
 }
 
+/* Dark-mode backgrounds for inline code and details. Typography exposes
+   color variables for most prose elements, but these two backgrounds are
+   set directly in the light theme config. */
+@layer utilities {
+  .dark .prose :where(code):not(:where(pre code)) {
+    background-color: #262626;
+  }
+
+  .dark .prose :where(details) {
+    background-color: #262626;
+  }
+
+  .dark .prose :where(a):hover {
+    color: #2dd4bf;
+  }
+}
+
+/* Smooth theme changes. This only applies while ThemeSwitch toggles the
+   theme, so initial page loads and normal hover transitions are unaffected.
+   Keep the duration in sync with THEME_TRANSITION_MS in ThemeSwitch.js. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color 300ms ease,
+      border-color 300ms ease,
+      color 300ms ease,
+      fill 300ms ease,
+      stroke 300ms ease,
+      text-decoration-color 300ms ease !important;
+  }
+}
+
 /* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-  transition: background-color 600000s 0s, color 600000s 0s;
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
 }
 
-/* Remove backticks from inline code in prose */
+/* Remove backticks from inline and block code in prose */
 .prose code::before,
 .prose code::after {
   content: '' !important;
